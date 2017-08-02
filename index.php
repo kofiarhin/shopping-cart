@@ -12,10 +12,6 @@
 	$Cart = new Cart();
 
 	$Cart->load_file('views/home.php');
-
-
-
-	
 	
 
  ?>
