@@ -1,13 +1,9 @@
 <?php 
 
-	include "./functions/functions.php";
 
 	class Cart extends Model {
 
 		protected $error;
-
-
-
 		public function load_file($url) {
 
 			include $url;
@@ -29,7 +25,6 @@
 				$data = unserialize($ser);
 				$this->show_products($data);
 
-				echo "There is a cookie so data fetched from file";
 
 
 			} else {
@@ -46,7 +41,6 @@
 
 					file_put_contents($cache_file, $ser);
 
-					echo "file deleted and new data fetched, <br>";
 
 					setcookie($cookie_name, $cookie_value, $time + 10);
 				} else {
@@ -57,7 +51,6 @@
 					$ser = serialize($data);
 					file_put_contents($cache_file, $ser);
 
-					echo "file does not exist so created new one and fetched data";
 					setcookie($cookie_name, $cookie_value, $time + 10);
 				}
 
@@ -89,19 +82,64 @@
 				$product_price = $product['product_price'];
 
 
-				echo "<div class='product'>";
-					echo "<img src='uploads/default.jpg'>";
-					echo "<p class='name'>".$product_name."</p>";
-					echo "<p class='price'>$".$product_price."</p>";
-					echo "<a href='controller/add.inc.php?id=$id'>Add to Cart</a>";
-				
-				echo "</div>"; // end product
+				echo "<form method='post' action='controller/add.inc.php'>
+					<img src='uploads/default.jpg'>
+					<p>".$product_name."</p> 
+					<p>$".$product_price."</p>
+					<input type='hidden' name='product_id' value='$id'> 
+					<input type='hidden' name='product_name' value='$product_name'> 
+					<input type='hidden' name='product_price' value='$product_price'> 
+					<button type='submit' name='add_submit'>Add to Cart</button>
+
+				</form>";
 			}
 
 			echo "</div>"; //end container
 		}
 
-	
+		
+		public function get_session($name) {
+
+			if(isset($_SESSION[$name])) {
+
+				return true;
+			} else {
+
+				return false;
+			}
+		}
+
+
+		public function show_session_products($data) {
+
+			if(!empty($data)) {
+
+				echo "<table>";
+			echo "<tr>
+							<td>Product Name</td>
+							<td>Product Price</td>
+							<td>Action</td>
+			</tr>";
+			foreach($data as $product) {
+
+				$product_name = $product['name'];
+				$product_price = $product['price'];
+				$id = $product['id'];
+
+				echo "<tr>
+					<td>".$product_name."</td>
+					<td>".$product_price."</td>
+					<td><a href='controller/remove.inc.php?id=$id'>Remove</a></td>
+
+				</tr>";
+			}
+			echo "</table>";
+
+
+			}
+
+			
+		}	
 		
 
 	}

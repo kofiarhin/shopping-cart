@@ -8,7 +8,6 @@
 <body>
 		<h1>Esco Cart</h1>
 
-		<h2>Display Product</h2>
 
 		<?php 
 
